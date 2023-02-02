@@ -2,7 +2,7 @@ jobs:
   build-branches:
     environment:
       VYOS_DIST: 'current'
-      VYOS_VERSION: '1.4'
+      VYOS_VERSION: '1.4.0-pre'
     machine: true
     steps:
       - checkout:
@@ -22,7 +22,7 @@ jobs:
   build-tags:
     environment:
       VYOS_DIST: 'current'
-      VYOS_VERSION: '1.4'
+      VYOS_VERSION: '1.4.0-pre'
     machine: true
     steps:
       - checkout:
