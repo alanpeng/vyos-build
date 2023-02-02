@@ -1,0 +1,54 @@
+jobs:
+  build-branches:
+    environment:
+      VYOS_DIST: 'equuleus'
+      VYOS_VERSION: '1.3.2'
+    machine: true
+    steps:
+      - checkout:
+      - run:
+          name: Build a container image
+          working_directory: ./docker-image
+          command: |
+            docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
+              "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
+               sudo mount -i -o remount,exec,dev /vyos && \
+               sudo apt-get update && \
+               sudo make iso && \
+               sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
+            docker build -t alanpeng/vyos-image:$CIRCLE_BRANCH .
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push alanpeng/vyos-image:$CIRCLE_BRANCH
+  build-tags:
+    environment:
+      VYOS_DIST: 'equuleus'
+      VYOS_VERSION: '1.3.2'
+    machine: true
+    steps:
+      - checkout:
+      - run:
+          name: Build a container image
+          working_directory: ./docker-image
+          command: |
+            docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
+              "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
+               sudo mount -i -o remount,exec,dev /vyos && \
+               sudo apt-get update && \
+               sudo make iso && \
+               sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
+            docker build -t alanpeng/vyos-image:$CIRCLE_TAG .
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push alanpeng/vyos-image:$CIRCLE_TAG
+workflows:
+  version: 2
+  build-for-branches:
+    jobs:
+      - build-branches
+  build-for-tags:
+    jobs:
+      - build-tags:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
