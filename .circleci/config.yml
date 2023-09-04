@@ -13,7 +13,6 @@ jobs:
             docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
               "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
                sudo mount -i -o remount,exec,dev /vyos && \
-               sudo curl -sS https://repo.powerdns.com/FD380FBB-pub.asc > vyos-build/data/live-build-config/archives/pdns.key.chroot && \
                sudo apt-get update && \
                sudo make iso && \
                sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
@@ -34,7 +33,6 @@ jobs:
             docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
               "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
                sudo mount -i -o remount,exec,dev /vyos && \
-               sudo curl -sS https://repo.powerdns.com/FD380FBB-pub.asc > vyos-build/data/live-build-config/archives/pdns.key.chroot && \
                sudo apt-get update && \
                sudo make iso && \
                sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
