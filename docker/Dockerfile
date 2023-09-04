@@ -73,6 +73,7 @@ RUN apt-get update && apt-get install -y \
       mc \
       pbuilder \
       devscripts \
+      equivs \
       lsb-release \
       libtool \
       libapt-pkg-dev \
@@ -597,6 +598,47 @@ RUN apt-get update && apt-get install -y \
       docbook-to-man \
       docbook-utils
 
+# Packages needed for ocserv
+RUN apt-get update && apt-get install -y \
+      autogen \
+      debhelper \
+      freeradius \
+      gawk \
+      gnutls-bin \
+      gperf \
+      gss-ntlmssp \
+      haproxy \
+      iproute2 \
+      iputils-ping \
+      libcjose-dev \
+      libcurl4-gnutls-dev \
+      libev-dev \
+      libgnutls28-dev \
+      libhttp-parser-dev \
+      libjansson-dev \
+      libkrb5-dev \
+      liblz4-dev \
+      libmaxminddb-dev \
+      libnl-route-3-dev \
+      libnss-wrapper \
+      liboath-dev \
+      libpam-wrapper \
+      libpam0g-dev \
+      libprotobuf-c-dev \
+      libradcli-dev \
+      libreadline-dev \
+      libseccomp-dev \
+      libsocket-wrapper \
+      libtalloc-dev \
+      libuid-wrapper \
+      nettle-dev \
+      nuttcp \
+      pkg-config \
+      protobuf-c-compiler \
+      ronn \
+      tcpdump \
+      yajl-tools
+
 #
 # fpm: a command-line program designed to help you build packages (e.g. deb)
 #
@@ -608,9 +650,14 @@ RUN apt-get update && apt-get install -y \
 RUN gem install public_suffix -v 4.0.7
 RUN gem install --no-document fpm
 
+# debmake: a native Debian tool for preparing sources for packaging
+RUN apt-get update && apt-get install -y \
+      debmake \
+      python3-debian
+
 # Allow password-less 'sudo' for all users in group 'sudo'
-RUN sed "s/^%sudo.*/%sudo\tALL=(ALL) NOPASSWD:ALL/g" -i /etc/sudoers && \
-    chmod a+s /usr/sbin/useradd /usr/sbin/groupadd /usr/sbin/gosu /usr/sbin/usermod
+RUN echo -e "vyos_bld\tALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/vyos_bld && \
+    chmod a+s /usr/sbin/useradd /usr/sbin/groupadd
 
 # Ensure sure all users have access to our OCAM and Go installation
 RUN echo "$(opam env --root=/opt/opam --set-root)" >> /etc/skel/.bashrc && \
