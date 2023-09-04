@@ -13,7 +13,10 @@ jobs:
             docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
               "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
                sudo mount -i -o remount,exec,dev /vyos && \
-               sudo apt-get --allow-unauthenticated update && \
+               sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com && \
+               sudo apt update && \
+               sudo apt upgrade -y && \
+               sudo apt-get update && \
                sudo make iso && \
                sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
             docker build -t alanpeng/vyos-image:$CIRCLE_BRANCH .
@@ -33,7 +36,10 @@ jobs:
             docker run --rm --privileged -v $(dirname ${PWD}):/vyos -w /vyos vyos/vyos-build:${VYOS_DIST} bash -c \
               "./configure --build-by 'peng.alan@gmail.com' --architecture amd64 --build-type release --version ${VYOS_VERSION} && \
                sudo mount -i -o remount,exec,dev /vyos && \
-               sudo apt-get --allow-unauthenticated update && \
+               sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com && \
+               sudo apt update && \
+               sudo apt upgrade -y && \
+               sudo apt-get update && \
                sudo make iso && \
                sudo mv build/vyos-${VYOS_VERSION}-amd64.iso docker-image/"
             docker build -t alanpeng/vyos-image:$CIRCLE_TAG .
