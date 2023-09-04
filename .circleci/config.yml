@@ -1,7 +1,7 @@
 jobs:
   build-branches:
     environment:
-      VYOS_DIST: 'current'
+      VYOS_DIST: 'equuleus'
       VYOS_VERSION: '1.3.3'
     machine: true
     steps:
@@ -21,7 +21,7 @@ jobs:
             docker push alanpeng/vyos-image:$CIRCLE_BRANCH
   build-tags:
     environment:
-      VYOS_DIST: 'current'
+      VYOS_DIST: 'equuleus'
       VYOS_VERSION: '1.3.3'
     machine: true
     steps:
